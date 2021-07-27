@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 const keys = require('../../config/keys');
 const logger = require('../../utils/logger')
 const passport = require('passport')
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
 
 
 //@Routes POST   /api/user/register
@@ -14,6 +16,12 @@ const passport = require('passport')
 //@access Public
 
 _route.post('/register',(req,res) => {
+
+    const {errors, isValid} = validateRegisterInput(req.body);
+  
+  if(!isValid){
+    return res.status(400).json(errors);
+  }
     User.findOne({email:req.body.email})
     .then(user => {
         if(user) {
@@ -72,6 +80,12 @@ _route.post('/register',(req,res) => {
 //@access Public
 
 _route.post('/login',(req,res) => {
+
+    const {errors, isValid} = validateLoginInput(req.body);
+  
+    if(!isValid){
+      return res.status(400).json(errors);
+    }
     User.findOne({email:req.body.email})
     .then(user => {
         if(!user) {
