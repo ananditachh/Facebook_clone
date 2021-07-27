@@ -23,3 +23,5 @@
 ::1 - - [27/Jul/2021:09:02:05 +0000] "POST /api/users/login HTTP/1.1" 500 1777 "-" "PostmanRuntime/7.28.2"
 ::1 - - [27/Jul/2021:09:03:01 +0000] "POST /api/users/login HTTP/1.1" 400 59 "-" "PostmanRuntime/7.28.2"
 ::1 - - [27/Jul/2021:09:03:13 +0000] "POST /api/users/login HTTP/1.1" 404 34 "-" "PostmanRuntime/7.28.2"
+::1 - - [27/Jul/2021:22:35:22 +0000] "POST /api/users/register HTTP/1.1" 400 144 "-" "PostmanRuntime/7.28.2"
+::1 - - [27/Jul/2021:22:35:42 +0000] "POST /api/users/register HTTP/1.1" 400 36 "-" "PostmanRuntime/7.28.2"
