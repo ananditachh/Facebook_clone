@@ -16,13 +16,12 @@ _route.get('/register',(req,res) => res.json({
 //@desc get all post 
 //@access Public
 _route.get('/allposts',(req,res) => {
-    Post.find({},{_v:0})
+    Post.find({})
     .sort({date:-1})
     .populate("postedbyuser","name lastname avatar")
     .then(posts => res.json(posts))
     .catch(err => console.log(err))
 })
-
 
 
 //@Routes POST   /api/post/createpost
@@ -41,10 +40,13 @@ _route.post('/createpost',passport.authenticate('jwt',{session:false}),
         })      
 
         newPost.save()
+        .then(post => post.populate("postedbyuser","name lastname avatar").execPopulate())
         .then(post => res.json(post))
         .catch(err => logger.error(`Error while creating post ${err}`))
 
 })
+
+
 
 
 
