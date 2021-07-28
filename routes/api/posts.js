@@ -8,7 +8,7 @@ const Post = require('../../models/PostsModel')
 const validatePostInput = require('../../validation/post');
 
 
-//@Routes GET  /api/post/allpost
+//@Routes GET  /api/posts/allposts
 //@desc get all post 
 //@access Public
 _route.get('/allposts',(req,res) => {
@@ -23,7 +23,7 @@ _route.get('/allposts',(req,res) => {
 })
 
 
-//@Routes POST   /api/post/createpost
+//@Routes POST   /api/posts/createpost
 //@desc Creating a post 
 //@access Private
 _route.post('/createpost',
@@ -50,7 +50,7 @@ _route.post('/createpost',
 })
 
 
-//@Routes GET  /api/post/postid
+//@Routes GET  /api/posts/user/posts
 //@desc get current user post 
 //@access Private
 _route.get(
@@ -70,7 +70,7 @@ _route.get(
   );
 
 
- //@Routes GET  /api/post/postid
+ //@Routes GET  /api/posts/postid
 //@desc get individual post 
 //@access Private
 _route.get(
@@ -89,7 +89,52 @@ _route.get(
     }
   ); 
 
- 
+
+ //@Routes PUT  /api/posts/user/:editpost
+//@desc update user post 
+//@access Private
+_route.post('/user/:editpost',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+              Post.findById(req.params.editpost)
+              .then(post => {
+                if (!post) {
+                  res.status(404).json({ nopostfound: 'No post found with the id' })
+                }  else {
+                      console.log('in post')
+                      console.log(post)
+                      if (post.postedbyuser.toString() === req.user.id) {
+                        const fields = {}
+                        fields.postedbyuser = req.user.id
+                        fields.text = req.body.text
+                        fields.image = req.body.image
+                       
+                        Post.findOneAndUpdate(
+                          {_id:req.params.editpost},
+                          {$set:fields},
+                          { new: true }
+                        )
+                        .populate("postedbyuser","name lastname avatar")
+                        .then(posts => {
+                          //console.log(req.user)
+                          res.json(posts)
+                        })
+                        .catch(err => {
+                          logger.error(err)
+                          res.status(404).json({ nopostfound: 'Error in updating the post' })
+                        })                        
+                  }                
+                }
+              })
+              .catch(err => res.status(404).json({ nopostfound: 'No post found ' }))
+            } 
+        )            
+             
+            
+
+
+
+
 
 
 module.exports = _route
