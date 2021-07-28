@@ -45,13 +45,13 @@ app.use('/api/users',users)
 app.use('/api/posts',posts)
 app.use('/api/profile',profile)
 
-app.use((req, res, next) => {
-    res.status(404).send({
-    status: 404,
-    error: 'Not found',
+//app.use((req, res, next) => {
+    //res.status(404).send({
+    //status: 404,
+    //error: 'Not found',
     
-    })
-   })
+    //})
+   //})
 
 //Initializing Server
 const PORT = 7000
@@ -59,3 +59,4 @@ app.listen(PORT, () => {
     console.log('Server started....')
     logger.info(`Server started and running on ${PORT}`)
 })
+

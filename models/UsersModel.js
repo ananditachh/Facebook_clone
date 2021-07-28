@@ -34,9 +34,10 @@ const Userschema = new Schema({
 },opts)
 
 Userschema.virtual('fullname')
-.get(function(){
-    this.firstName = this.name[0].toUpperCase() + this.name.substring(1);
-    this.lastName = this.lastname[0].toUpperCase() + this.lastname.substring(1);
+.get(function() {
+   
+    this.firstName = this.name.charAt(0).toUpperCase() + this.name.slice(1)
+    this.lastName = this.lastname.charAt(0).toUpperCase() + this.lastname.slice(1)
     return `${this.firstName} ${this.lastName}`
 })
 
