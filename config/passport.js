@@ -13,6 +13,8 @@ module.exports = passport => {
             User.findById(payload.id)
             .then(user => {
                 if (user) {
+                    console.log('passport')
+                    console.log(user)
                     return done(null,user)
                 }
                 return done(null,false)

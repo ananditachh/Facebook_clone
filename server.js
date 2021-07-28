@@ -36,6 +36,8 @@ app.use(express.json())
 app.use(passport.initialize())
 require('./config/passport')(passport)
 
+
+
 //Routes
 app.get('/', (req,res) => res.send('Hello World Mohita Hello!'))
 

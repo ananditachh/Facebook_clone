@@ -132,6 +132,7 @@ _route.post('/login',(req,res) => {
 _route.get('/current',
     passport.authenticate ('jwt',{session:false}),
     (req,res) => {
+        
         res.json(req.user)
 
 })
