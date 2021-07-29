@@ -61,8 +61,13 @@ _route.get(
       console.log(req.user)  
       Post.find({ postedbyuser: req.user.id })
         .populate("postedbyuser","name lastname avatar")
-        .then(post =>          
-          res.json(post)
+        .then(post => {
+            if (Object.keys(post).length > 0) {   
+            res.json(post)
+          } else {
+            res.status(404).json({ nopostfound: 'No post found for the user' })
+          }
+        }
         )
         .catch((err) =>
           res.status(404).json({ nopostfound: 'No post found for the user' })

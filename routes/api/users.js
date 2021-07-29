@@ -2,6 +2,7 @@ const express = require('express')
 const _route = express.Router()
 const bcrypt  = require ('bcryptjs')
 const User = require('../../models/UsersModel')
+const Profile = require('../../models/ProfileModel')
 const gravatar = require('gravatar')
 const jwt = require('jsonwebtoken')
 const keys = require('../../config/keys');
@@ -9,6 +10,7 @@ const logger = require('../../utils/logger')
 const passport = require('passport')
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
+
 
 
 //@Routes POST   /api/user/register
