@@ -5,6 +5,7 @@ const passport = require('passport');
 const logger = require('../../utils/logger')
 const jwt = require('jsonwebtoken')
 const Post = require('../../models/PostsModel')
+const Profile = require('../../models/ProfileModel')
 const validatePostInput = require('../../validation/post');
 
 
@@ -90,7 +91,7 @@ _route.get(
   ); 
 
 
- //@Routes PUT  /api/posts/user/:editpost
+ //@Routes POST  /api/posts/user/:editpost
 //@desc update user post 
 //@access Private
 _route.post('/user/:editpost',
@@ -103,6 +104,7 @@ _route.post('/user/:editpost',
                 }  else {
                       console.log('in post')
                       console.log(post)
+
                       if (post.postedbyuser.toString() === req.user.id) {
                         const fields = {}
                         fields.postedbyuser = req.user.id
@@ -121,16 +123,64 @@ _route.post('/user/:editpost',
                         })
                         .catch(err => {
                           logger.error(err)
-                          res.status(404).json({ nopostfound: 'Error in updating the post' })
+                          res.status(404).json({ updateposterror: 'Error in updating the post' })
                         })                        
-                  }                
+                  } else {
+                    res.status(401).json({ notauthorized: 'You can edit only your post' })
+                  }               
                 }
               })
               .catch(err => res.status(404).json({ nopostfound: 'No post found ' }))
             } 
         )            
-             
-            
+
+        
+//@Routes DELETE  /api/posts/deletepost
+//@desc delete user post 
+//@access Private            
+_route.delete('/deletepost/:id',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+              //console.log(req.params.id)
+              Post.findById(req.params.id)
+              .then(post => {
+                if (post.postedbyuser.toString() !== req.user.id.toString()) {
+                    return res
+                    .status(401)
+                    .json({ notauthorized: 'User not authorized' })
+                }
+                post.remove()
+                .then(() => res.json({ success: true }))
+                .catch(err=>logger.error(err));
+              })
+              .catch(err => {
+                logger.error(err)
+                res.status(404).json({ postnotfound: 'No post found' })}
+              )
+            })
+
+
+//@Routes POST  /api/posts/like/:id
+//@desc Likes user post 
+//@access Private 
+
+_router.post('/like/:id',
+            passport.authenticate('jwt', { session: false }), 
+            (req,res) => {
+
+            }
+)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
