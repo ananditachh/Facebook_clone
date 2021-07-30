@@ -200,7 +200,7 @@ _route.post(
 _route.post('/following/post',
             passport.authenticate('jwt', { session: false }),
             (req,res) => {
-                
+
                 Profile.findOne({user:req.user.id})
                 .then(profile => {
                     console.log(profile)
@@ -229,6 +229,38 @@ _route.post('/following/post',
                 .catch(err => console.log(err))
             }
             )
+
+// @route   POST api/profile/followings
+// @desc    show the followers (friends)
+// @access  Private
+_route.post('/followings',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+                Profile.findOne({user:req.user.id})
+                .populate("following.user","name lastname avatar")
+                .then(profile => {
+                    console.log(profile.following)
+                    res.json(profile.following)
+                })
+                .catch(err => res.status(404).json({nofriends: 'No friends'}))
+            }
+            )
+
+// @route   DELETE api/profile
+// @desc    Delete user and profile
+// @access  Private
+_route.delete(
+    "/",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      Profile.findOneAndRemove({ user: req.user.id }).then(() => {
+        User.findOneAndRemove({ _id: req.user.id }).then(() =>
+          res.json({ success: true })
+        );
+      });
+    }
+  );            
+
 
 
 module.exports = _route
