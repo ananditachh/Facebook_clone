@@ -148,7 +148,7 @@ _route.post(
     })
      
 // @route   POST api/profile/unfollow/:user_id
-// @desc    Follow a user (friends)
+// @desc    unFollow a user (friends)
 // @access  Private
 _route.post(
     '/unfollow/:user_id',
@@ -195,7 +195,7 @@ _route.post(
     })
 
 // @route   POST api/profile/follow/:post
-// @desc    Follow a user (friends)
+// @desc    Get the followers post in news feed (friends)
 // @access  Private
 _route.post('/following/post',
             passport.authenticate('jwt', { session: false }),
@@ -206,7 +206,6 @@ _route.post('/following/post',
                     console.log(profile)
 
                     if ((profile.following).length === 0) {   
-
                         return res
                         .status(400)
                         .json({ NoPost: 'No Posts to show.Add more friends to see more posts in your News Feed.' });
@@ -214,7 +213,6 @@ _route.post('/following/post',
 
                     const followpost  = profile.following.map(following => following.user)
                     console.log(followpost)    
-
 
                     Post.find({postedbyuser:{"$in":followpost}})
                     .populate("postedbyuser","name lastname avatar")
@@ -260,6 +258,7 @@ _route.delete(
       });
     }
   );            
+
 
 
 

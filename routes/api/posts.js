@@ -297,7 +297,30 @@ _route.delete(
   }
 );
 
+// @route   POST api/posts/save/:post_id
+// @desc    save followers post and own post
+// @access  Private
 
+_route.post('/save/:post_id',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+              Profile.findOne({user:req.user.id})
+              .then(profile => {
+                if (
+                  profile.saved.filter(saved => saved.savedpost.toString() === req.params.post_id).length > 0
+                  ) {
+                    return res
+                    .status(400)
+                    .json({ alreadypostsaved: 'You already saved the post' });
+                  }
+                profile.saved.unshift({savedpost:req.params.post_id})
+                profile.save()                
+                .then(profile => res.json(profile))
+              })
+              .catch(err => res.json(err))
+            }
+
+            )
 
 
 
