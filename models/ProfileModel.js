@@ -9,6 +9,9 @@ const ProfileSchema = new Schema({
   city:{
     type:String
   },
+  bio:{
+    type:String
+  },
   profilepic:{
     type:String
   },
@@ -21,17 +24,27 @@ const ProfileSchema = new Schema({
   school:{
     type:String
   },
+  hobbies:{
+    type:[String]
+  },
   followers: [
-    {
+    { 
+      user: 
+      {
       type: Schema.Types.ObjectId,
-    ref: 'users'
+      ref: 'users'
+    }
+     
   }
   ],
   following : [
     { 
+      user: 
+      {
       type: Schema.Types.ObjectId,
       ref: 'users'
-    } 
+    }
+  }
 ]
 
   
