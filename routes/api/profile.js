@@ -150,9 +150,85 @@ _route.post(
 // @route   POST api/profile/unfollow/:user_id
 // @desc    Follow a user (friends)
 // @access  Private
+_route.post(
+    '/unfollow/:user_id',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        console.log(req.user.id)
+        Profile.findOne({user:req.user.id})
+        .then(profile => {
+           
+            if (
+                profile.following.filter(following => following.user.toString() === req.params.user_id).length===0
+                ) {
+                   
+                    return res
+                    .status(400)
+                    .json({ alreadyfollowing: 'User are not following the user' });
+                }
+
+                const removeIndex = profile.following
+                .map(following => following.user.toString())
+                .indexOf(req.params.user_id);    
+
+            profile.following.splice(removeIndex,1)  
+            profile.save()    
+                .then(profile => profile.populate("user","name lastname").execPopulate())       
+                .then(profile => res.json(profile))  
+
+            Profile.findOne({user:req.params.user_id})    
+            .then(profile => {
+
+                const removeIndex = profile.followers
+                .map(followers => followers.user.toString())
+                .indexOf(req.user.id);  
+
+                profile.followers.splice(removeIndex,1)
+                profile.save()
+                    .then(profile => profile.populate("followers.user","name lastname").execPopulate())
+                    .then(profile => console.log(profile))
+            })           
+            
+        })
+
+        .catch(err => res.json(err))
+    })
+
+// @route   POST api/profile/follow/:post
+// @desc    Follow a user (friends)
+// @access  Private
+_route.post('/following/post',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+                
+                Profile.findOne({user:req.user.id})
+                .then(profile => {
+                    console.log(profile)
+
+                    if ((profile.following).length === 0) {   
+
+                        return res
+                        .status(400)
+                        .json({ NoPost: 'No Posts to show.Add more friends to see more posts in your News Feed.' });
+                    }
+
+                    const followpost  = profile.following.map(following => following.user)
+                    console.log(followpost)    
 
 
+                    Post.find({postedbyuser:{"$in":followpost}})
+                    .populate("postedbyuser","name lastname avatar")
+                    .sort({date:-1})
+                    .then(posts => {
+                        console.log(posts)
+                        res.json(posts)
+                    })
+                    .catch(err =>  res.status(404).json({ nopostsfound: 'No posts found' }))  
 
+                })
+                .catch(err => console.log(err))
+            }
+            )
 
 
 module.exports = _route
