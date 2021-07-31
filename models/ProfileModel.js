@@ -47,21 +47,14 @@ const ProfileSchema = new Schema({
   }
 ],
 saved:[
-  { 
-    user: 
-    {
-    type: Schema.Types.ObjectId,
-    ref: 'users'
-  },
+  {    
   savedpost:
   {  
       type: Schema.Types.ObjectId,
       ref: 'posts'
   },
 }  
-]
-
-  
+] 
 })
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

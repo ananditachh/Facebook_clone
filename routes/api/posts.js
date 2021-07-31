@@ -313,9 +313,13 @@ _route.post('/save/:post_id',
                     .status(400)
                     .json({ alreadypostsaved: 'You already saved the post' });
                   }
-                profile.saved.unshift({savedpost:req.params.post_id})
-                profile.save()                
+
+                profile.saved.unshift({savedpost:req.params.post_id,})
+                //.populate("saved.savedpost", "postedbyuser")
+                //.populate("postedbyuser","name lastname avatar")
+                profile.save()                             
                 .then(profile => res.json(profile))
+                .catch(err => console.log(error))
               })
               .catch(err => res.json(err))
             }
@@ -323,9 +327,67 @@ _route.post('/save/:post_id',
             )
 
 
+// @route   POST api/posts/unsave/:post_id
+// @desc    unsave followers post and own post
+// @access  Private
+_route.post('/unsave/:post_id',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+              Profile.findOne({user:req.user.id})
+              .then(profile => {
+                if (
+                  profile.saved.filter(saved => saved.savedpost.toString() === req.params.post_id).length === 0
+                ) {
+                  return res
+                  .status(400)
+                  .json({Nopost: 'There is no saved items' });
+                }
 
+                const removeIndex = profile.saved
+                .map(saveditem => saveditem._id.toString())
+                .indexOf(req.params.post_id);
+      
+                profile.saved.splice(removeIndex, 1);
 
+                profile.save().then(post => res.json(post));
 
+              })
+              .catch(err => res.json(err))
+            }  
+            )
+
+// @route   POST api/posts/allsavedpost/
+// @desc    Saved post for the current user
+// @access  Private
+_route.post('/allsavedpost',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+
+              Profile.findOne({user:req.user.id})
+              .then(profile => {
+                if ((profile.saved).length === 0) {
+                  return res
+                  .status(400)
+                  .json({ NosavedPost: 'No Posts to show.'})
+                }
+
+                const savedPost  = profile.saved.map(saved => saved.savedpost)
+                console.log(savedPost)
+                
+                Post.find({_id:{"$in":savedPost}})
+                    .populate("saved.savedpost","text image like comments postedbyuser")
+                    .populate("postedbyuser","name lastname avatar")
+                    .sort({date:-1})
+                    .then(posts => {
+                        console.log(posts)
+                        res.json(posts)
+                    })
+                    .catch(err => logger.error(err))
+                
+              })
+              .catch(err => res.json(err))
+            }
+            )
 
 
 
