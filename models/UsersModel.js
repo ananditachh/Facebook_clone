@@ -26,6 +26,12 @@ const Userschema = new Schema({
     avatar:{
         type:String
     },
+    resetToken:{
+        type:String
+    },
+    expireToken:{
+        type:String
+    },
     date:{
         type:Date,
         default:Date.now

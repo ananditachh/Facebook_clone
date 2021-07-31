@@ -10,18 +10,14 @@ const logger = require('../../utils/logger')
 const passport = require('passport')
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
+const validatePasswordInput = require('../../validation/password');
 const nodeMailer = require('nodemailer')
 const sendGridTransport = require('nodemailer-sendgrid-transport')
+const crypto = require('crypto')
 
 const transporter = nodeMailer.createTransport(sendGridTransport({
     auth:{
         api_key:keys.SENDGRID_API
-    }
-}))
-const Api_key = keys.SENDGRID_API
-const transporters = nodeMailer.createTransport(sendGridTransport({
-    auth:{
-        api_key:Api_key
     }
 }))
 
@@ -71,13 +67,13 @@ _route.post('/register',(req,res) => {
             }) 
 
             .then(user => {
-                transporter.sendMail({
-                         to:user.email,
-                         from:"rajthilakam@gmail.com",
-                         replyto:"no-reply@socialmedia.com",
-                         subject:"signup success",
-                         html:"<h1>Welcome to Social Media App</h1>"
-                })
+                //transporter.sendMail({
+                         //to:user.email,
+                         //from:"rajthilakam@gmail.com",
+                         //replyto:"no-reply@socialmedia.com",
+                         //subject:"signup success",
+                         //html:"<h1>Welcome to Social Media App</h1>"
+                //})
                 res.json(user)
                 logger.info(`User successfully created id:${user._id} email:${user.email}`)            
             })
@@ -151,17 +147,89 @@ _route.post('/login',(req,res) => {
 //@desc Forget Password
 //@access Private
 _route.post('/reset',(req,res) => {
-    User.findOne({email:req.body.email})
-    .then(user => {
-        if(!user) {
-            res.status(404).json({notfound:"Email is not registered."})
+
+    crypto.randomBytes(32,(err,buffer)=>{
+
+        if(err){
+            logger.error(err)
+            console.log(err)
         }
-        
+
+        const token = buffer.toString("hex")
+
+        User.findOne({email:req.body.email})
+        .then(user=>{
+            if(!user){
+                return res.status(422).json({error:"User dont exists with that email"})
+            }
+            user.resetToken = token
+            user.expireToken = Date.now() + 3600000
+            user.save().then((sendemail)=>{
+
+                transporter.sendMail({
+                    to:user.email,
+                    from:"rajthilakam@gmail.com",
+                    replyto:"no-reply@socialmedia.com",
+                    subject:"password reset",
+                    html:`
+                    <p>You requested for password reset</p>
+                    <p>${token}</p>
+                    <h5>click in this <a href="http://localhost:5000/reset/${token}">link</a> to reset password</h5>
+                    `
+                })
+                res.json({message:"An Email has beeen sent"})
+            })
+
+        })
+        .catch(err => {
+            re.json(err)
+        })
     })
 })
 
 
+//@Routes POST  /new-password
+//@desc new Password updated
+//@access Private
+_route.post('/new-password',(req,res)=> {
 
+    const {errors, isValid} = validatePasswordInput(req.body);
+  
+    if(!isValid){
+      return res.status(400).json(errors);
+    }
+
+    const newPassword = req.body.password
+    const sentToken = req.body.token
+
+    User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})
+    .then(user=>{
+
+        if(!user){
+            return res.status(422).json({error:"Try again session expired"})
+        }
+
+        bcrypt.genSalt(10)
+        .then((salt) => {
+            console.log(salt)
+            return bcrypt.hash(newPassword,salt)
+        })
+        .then ((hash) => {
+            if (hash) {
+                user.password = hash
+                user.resetToken = undefined
+                user.expireToken = undefined
+                user.save()
+                return res.json({message:"Password Updated Success"})
+            }
+        }) 
+        .catch(err => logger.error(err))
+
+       
+    }).catch(err=>{
+        console.log(err)
+    })
+})
 
 //@Routes GET    Route
 //@desc Registering a user
