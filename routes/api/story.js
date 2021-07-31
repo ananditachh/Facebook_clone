@@ -48,12 +48,33 @@ _route.post('/create/story',
 
 )
 
-// @route   POST api/mystory/currentuser/story/
+// @route   GET api/mystory/story/
 // @desc    show the story for current user and their followers 
 // @access  Private
+_route.get(
+    '/story',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+      console.log(req.user)  
+      Story.find({ postedbyuser: req.user.id })
+        .populate("postedbyuser","name lastname avatar")
+        .then(story => {
+            if (Object.keys(story).length > 0) {   
+            res.json(story)
+          } else {
+            res.status(404).json({ nopostfound: 'Create a story' })
+          }
+        }
+        )
+        .catch((err) =>
+          res.status(404).json({ nopostfound: 'No Story found for the user' })
+        );
+    }
+  );
 
-
-
+// @route   POST api/mystory/allstory/
+// @desc    get the story for current user and their followers 
+// @access  Private
 
 
 
