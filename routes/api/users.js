@@ -10,8 +10,20 @@ const logger = require('../../utils/logger')
 const passport = require('passport')
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
+const nodeMailer = require('nodemailer')
+const sendGridTransport = require('nodemailer-sendgrid-transport')
 
-
+const transporter = nodeMailer.createTransport(sendGridTransport({
+    auth:{
+        api_key:keys.SENDGRID_API
+    }
+}))
+const Api_key = keys.SENDGRID_API
+const transporters = nodeMailer.createTransport(sendGridTransport({
+    auth:{
+        api_key:Api_key
+    }
+}))
 
 //@Routes POST   /api/user/register
 //@desc Registering a user
@@ -59,6 +71,13 @@ _route.post('/register',(req,res) => {
             }) 
 
             .then(user => {
+                transporter.sendMail({
+                         to:user.email,
+                         from:"rajthilakam@gmail.com",
+                         replyto:"no-reply@socialmedia.com",
+                         subject:"signup success",
+                         html:"<h1>Welcome to Social Media App</h1>"
+                })
                 res.json(user)
                 logger.info(`User successfully created id:${user._id} email:${user.email}`)            
             })
@@ -126,6 +145,22 @@ _route.post('/login',(req,res) => {
     })
     .catch(err => logger.error(`Error while user tries to login ${err}`))
 })
+
+
+//@Routes GET    Route
+//@desc Forget Password
+//@access Private
+_route.post('/reset',(req,res) => {
+    User.findOne({email:req.body.email})
+    .then(user => {
+        if(!user) {
+            res.status(404).json({notfound:"Email is not registered."})
+        }
+        
+    })
+})
+
+
 
 
 //@Routes GET    Route
