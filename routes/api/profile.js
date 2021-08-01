@@ -2,6 +2,7 @@ const express = require('express');
 const _route = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
+const validateNameInput = require('../../validation/name');
 const Profile = require("../../models/ProfileModel");
 // Load User Model
 const User = require("../../models/UsersModel");
@@ -244,6 +245,56 @@ _route.post('/followings',
             }
             )
 
+
+// @route   POST api/profile/searchuser
+// @desc    search single user by name(user info and profile info)
+// @access  Private            
+_route.post('/searchuser',
+            passport.authenticate("jwt", { session: false }),
+            (req,res) => {
+            const namelower = (req.body.name).toLowerCase()    
+            User.findOne({name:namelower})
+            .select('-password')
+            .then(user => {
+                if(!user) {
+                    return res.status(404).json("No person found")
+                }
+                Profile.findOne({user:user._id})
+                .populate("user","name lastname avatar")
+                .then(profile => {                       
+                        res.json(profile)
+                    })
+
+                })
+                .catch(err => res.json(err)) 
+            })
+            
+// @route   POST api/profile/users
+// @desc    search for a list of  user by name or lastname
+// @access  Private
+_route.post('/users',
+            passport.authenticate("jwt", { session: false }),
+            (req,res) => {
+                const {errors, isValid} = validateNameInput(req.body);
+  
+        if(!isValid){
+            return res.status(400).json(errors);
+        }
+        const nameSearch = (req.body.name).slice(0,3).toLowerCase() 
+        console.log(nameSearch)
+
+        User.find(
+            { $or:[
+               { name:{$regex:`.*${nameSearch}.*`}},
+               { lastname:{$regex:`.*${nameSearch}.*`}}
+            ]
+            })           
+        .then(user => {
+                console.log(user)
+                return res.json(user)
+        })
+    })
+    
 // @route   DELETE api/profile
 // @desc    Delete user and profile
 // @access  Private

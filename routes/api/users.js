@@ -11,6 +11,7 @@ const passport = require('passport')
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 const validatePasswordInput = require('../../validation/password');
+
 const nodeMailer = require('nodemailer')
 const sendGridTransport = require('nodemailer-sendgrid-transport')
 const crypto = require('crypto')
@@ -113,7 +114,7 @@ _route.post('/login',(req,res) => {
         bcrypt.compare(req.body.password,user.password)
         .then(isMatch => {
             if (isMatch) {
-                //return res.json({msg:'User Logged in'})
+                
                 const payload = {
                     id: user.id,
                     name: user.name,
@@ -237,9 +238,7 @@ _route.post('/new-password',(req,res)=> {
 _route.get('/current',
     passport.authenticate ('jwt',{session:false}),
     (req,res) => {
-        
         res.json(req.user)
-
 })
 
 module.exports = _route
