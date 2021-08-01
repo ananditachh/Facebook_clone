@@ -6,6 +6,7 @@ const validateNameInput = require('../../validation/name');
 const Profile = require("../../models/ProfileModel");
 // Load User Model
 const User = require("../../models/UsersModel");
+const {upload} = require('../../fileupload');
 
 _route.get('/test',(req,res) => res.json({
     msg:'Profile route works'
@@ -309,6 +310,27 @@ _route.delete(
       });
     }
   );            
+
+
+// @route   POST /fileupload
+// @desc    upload a profile pic
+// @access  Private
+_route.post('/upload',
+            passport.authenticate("jwt", { session: false }),
+            upload.single("file"),
+            (req,res) => {
+               try {
+                    return res.status(200).json("File uploded successfully");
+                  } catch (error) {
+                    console.error(error);
+                  }
+                
+            }
+)
+
+
+
+
 
 
 

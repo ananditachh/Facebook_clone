@@ -11,6 +11,8 @@ const app = express()
 const fs = require('fs')
 const morgan = require('morgan')
 const keys = require('./config/keys')
+const multer = require('multer')
+const path = require("path");
 
 // setup the Http request and response logger
 const accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'})
@@ -29,6 +31,7 @@ mongoose
         logger.error({message:err})
     })
 
+
 //Middleware
 app.use(express.urlencoded())
 app.use(express.json())    
@@ -37,6 +40,25 @@ app.use(express.json())
 app.use(passport.initialize())
 require('./config/passport')(passport)
 
+
+//Multer middleware to save file upload
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "/SOCIALMEDIAAPP/uploads");
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.originalname);
+    },
+  });
+
+  const upload = multer({ storage: storage });
+  app.post("/fileupload", upload.single("file"), (req, res) => {
+    try {
+      return res.status(200).json("File uploded successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  });  
 
 
 //Routes
@@ -49,6 +71,7 @@ app.use('/api/posts',posts)
 app.use('/api/profile',profile)
 app.use('/api/mystory',story)
 
+
 //app.use((req, res, next) => {
     //res.status(404).send({
     //status: 404,
@@ -56,7 +79,7 @@ app.use('/api/mystory',story)
     
     //})
    //})
-
+  
 //Initializing Server
 const PORT = 7000
 app.listen(PORT, () => {
@@ -64,3 +87,4 @@ app.listen(PORT, () => {
     logger.info(`Server started and running on ${PORT}`)
 })
 
+module.exports = {upload}

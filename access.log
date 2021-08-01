@@ -528,3 +528,8 @@
 ::1 - - [01/Aug/2021:09:03:45 +0000] "POST /api/profile/users HTTP/1.1" 200 354 "-" "PostmanRuntime/7.28.2"
 ::1 - - [01/Aug/2021:09:09:11 +0000] "POST /api/profile/users HTTP/1.1" 200 354 "-" "PostmanRuntime/7.28.2"
 ::1 - - [01/Aug/2021:09:09:58 +0000] "POST /api/profile/users HTTP/1.1" 200 710 "-" "PostmanRuntime/7.28.2"
+::1 - - [01/Aug/2021:23:34:35 +0000] "POST /api/users/login HTTP/1.1" 200 322 "-" "PostmanRuntime/7.28.2"
+::1 - - [01/Aug/2021:23:38:47 +0000] "POST /fileupload HTTP/1.1" 500 204 "-" "PostmanRuntime/7.28.2"
+::1 - - [01/Aug/2021:23:40:20 +0000] "POST /fileupload HTTP/1.1" 200 27 "-" "PostmanRuntime/7.28.2"
+::1 - - [01/Aug/2021:23:48:24 +0000] "POST /upload HTTP/1.1" 404 146 "-" "PostmanRuntime/7.28.2"
+::1 - - [01/Aug/2021:23:50:37 +0000] "POST /upload HTTP/1.1" 200 315 "-" "PostmanRuntime/7.28.2"
