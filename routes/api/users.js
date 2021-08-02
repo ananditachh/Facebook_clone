@@ -175,7 +175,7 @@ _route.post('/reset',(req,res) => {
                     html:`
                     <p>You requested for password reset</p>
                     <p>${token}</p>
-                    <h5>click in this <a href="http://localhost:5000/reset/${token}">link</a> to reset password</h5>
+                    <h5>click in this <a href="http://localhost:7000/reset/${token}">link</a> to reset password</h5>
                     `
                 })
                 res.json({message:"An Email has beeen sent"})

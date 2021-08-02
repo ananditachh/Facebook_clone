@@ -121,11 +121,15 @@ _route.post(
         console.log(req.user.id)
         Profile.findOne({user:req.user.id})
         .then(profile => {
+
+            if(!profile) {
+                return res.status(404).json({Noprofile:'No profile found'})
+            }
            
             if (
                 profile.following.filter(following => following.user.toString() === req.params.user_id).length>0
                 ) {
-                   
+                    console.log('hi')
                     return res
                     .status(400)
                     .json({ alreadyfollowing: 'User already following the user' });
@@ -134,7 +138,9 @@ _route.post(
             profile.following.unshift({user:req.params.user_id})  
             profile.save()    
                 .then(profile => profile.populate("following.user","name lastname").execPopulate())       
-                .then(profile => res.json(profile))  
+                .then(profile => { console.log(profile)
+                    res.json(profile)}
+                    )  
 
             Profile.findOne({user:req.params.user_id})    
             .then(profile => {
@@ -159,6 +165,10 @@ _route.post(
         console.log(req.user.id)
         Profile.findOne({user:req.user.id})
         .then(profile => {
+
+            if (!profile) {
+                return res.status(404).json({Noprofile:'No profile found'})
+            } 
            
             if (
                 profile.following.filter(following => following.user.toString() === req.params.user_id).length===0
@@ -181,11 +191,11 @@ _route.post(
             Profile.findOne({user:req.params.user_id})    
             .then(profile => {
 
-                const removeIndex = profile.followers
+                const removeIndex2 = profile.followers
                 .map(followers => followers.user.toString())
                 .indexOf(req.user.id);  
 
-                profile.followers.splice(removeIndex,1)
+                profile.followers.splice(removeIndex2,1)
                 profile.save()
                     .then(profile => profile.populate("followers.user","name lastname").execPopulate())
                     .then(profile => console.log(profile))

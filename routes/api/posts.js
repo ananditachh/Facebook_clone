@@ -282,7 +282,7 @@ _route.delete(
             .status(404)
             .json({ commentnotexists: 'Comment does not exist' });
         }
-
+        
         // Get remove index
         const removeIndex = post.comments
           .map(item => item._id.toString())

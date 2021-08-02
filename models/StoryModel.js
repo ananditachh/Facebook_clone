@@ -17,7 +17,7 @@ const StorySchema = new Schema ({
           expire_at: {
             type: Date,
             default: Date.now(),
-            expires: 1800
+            expires: 180
         }
     }, { timestamps: true 
     
@@ -25,7 +25,7 @@ const StorySchema = new Schema ({
 
 );
 
-StorySchema.index({ "expire_at": 1 }, { expireAfterSeconds: 1800 });
+StorySchema.index({ "expire_at": 1 }, { expireAfterSeconds: 180 });
 
 module.exports = Story = mongoose.model('story', StorySchema);
 
