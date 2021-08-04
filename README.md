@@ -12,5 +12,7 @@ Comment,Uncomment Post
 Get Friends Post on users News Feed
 Show Friends List on users Profile
 Search User based on handle
-Create a Story (TTL MONGODB)
+Create a Story (TTL MONGODB).
+Upload a image using multer.js
+Logging using winston.js.
 
