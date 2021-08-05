@@ -66,7 +66,7 @@ _route.post('/register',(req,res) => {
                 console.log(newUser)
                 return newUser.save()
             }) 
-
+            
             .then(user => {
                 //transporter.sendMail({
                          //to:user.email,

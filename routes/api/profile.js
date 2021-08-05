@@ -15,7 +15,6 @@ _route.get('/test',(req,res) => res.json({
 // @route   GET api/profile
 // @desc    Get current users profile
 // @access  Private
-
 _route.get('/',
             passport.authenticate("jwt", { session: false }),
             (req,res) => {
@@ -206,7 +205,7 @@ _route.post(
         .catch(err => res.json(err))
     })
 
-// @route   POST api/profile/follow/:post
+// @route   POST api/profile/following/:post
 // @desc    Get the followers post in news feed (friends)
 // @access  Private
 _route.post('/following/post',
@@ -230,7 +229,9 @@ _route.post('/following/post',
                     .populate("postedbyuser","name lastname avatar")
                     .sort({date:-1})
                     .then(posts => {
-                        console.log(posts)
+                        //console.log(posts)
+                        const friendsPosts = posts
+                        console.log(friendsPosts)
                         res.json(posts)
                     })
                     .catch(err =>  res.status(404).json({ nopostsfound: 'No posts found' }))  
@@ -239,6 +240,53 @@ _route.post('/following/post',
                 .catch(err => console.log(err))
             }
             )
+
+// @route   POST api/profile/userfollow/:post
+// @desc    Get the users post and friends post in news feed (friends)
+// @access  Private
+_route.post('/userfollow/post',
+            passport.authenticate('jwt', { session: false }),
+            (req,res) => {
+
+                Profile.findOne({user:req.user.id})
+                .then(profile => {
+                    console.log(profile)
+
+                    if ((profile.following).length === 0) {   
+                        return res
+                        .status(400)
+                        .json({ NoPost: 'No Posts to show.Add more friends to see more posts in your News Feed.' });
+                    }
+
+                    const followpost  = profile.following.map(following => following.user)
+                    console.log(followpost)    
+
+                    Post.find({postedbyuser:{"$in":followpost}})
+                    .populate("postedbyuser","name lastname avatar")
+                    .sort({date:-1})
+                    .then(posts => {
+                        //console.log(posts)
+                        const friendsPosts = posts
+                        Post.find({postedbyuser:req.user.id})
+                        .populate("postedbyuser","name lastname avatar")
+                        .sort({date:-1})
+                        .then(posts => {
+                            const userpost = posts
+                            const result = friendsPosts.concat(userpost)
+                            console.log(result)
+                            res.json(result)
+
+                        })
+                        
+                    })
+                    .catch(err =>  res.status(404).json({ nopostsfound: 'No posts found' }))  
+
+                })
+                .catch(err => console.log(err))
+            }
+            )
+
+
 
 // @route   POST api/profile/followings
 // @desc    show the followers (friends)
