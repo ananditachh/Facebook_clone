@@ -267,16 +267,21 @@ _route.post('/userfollow/post',
                     .then(posts => {
                         //console.log(posts)
                         const friendsPosts = posts
+
                         Post.find({postedbyuser:req.user.id})
                         .populate("postedbyuser","name lastname avatar")
                         .sort({date:-1})
                         .then(posts => {
                             const userpost = posts
                             const result = friendsPosts.concat(userpost)
-                            console.log(result)
-                            res.json(result)
+                            const sortedArray = result.sort((a, b) => b.date > a.date ? 1: -1);
+                            console.log(sortedArray)
+                            res.json(sortedArray)
+                            });
+                            
+                            
 
-                        })
+                        
                         
                     })
                     .catch(err =>  res.status(404).json({ nopostsfound: 'No posts found' }))  
