@@ -1,4 +1,5 @@
 # SocialMedia_clone
+npm start
 Mini Version of Social Media Clone with MERN stack
 Back End API's created with  Node,Express.js,Mongodb
 Youtube Link: https://youtu.be/mAuXQQXLTiw
