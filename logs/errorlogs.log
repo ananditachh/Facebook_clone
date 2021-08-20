@@ -2054,3 +2054,9 @@ info: Aug-18-2021 10:45:39: 	Connected to Mongodb
 info: Aug-18-2021 10:45:40: 	Server started and running on 7000 
 info: Aug-18-2021 10:45:42: 	Server started and running on 7000 
 info: Aug-18-2021 10:45:42: 	Connected to Mongodb 
+info: Aug-18-2021 10:45:45: 	Server started and running on 7000 
+info: Aug-18-2021 10:45:46: 	Connected to Mongodb 
+error: Aug-18-2021 10:46:33: 	Error while registering new user ValidationError: lastname: Path `lastname` is required. 
+error: Aug-18-2021 10:46:35: 	Error while registering new user ValidationError: lastname: Path `lastname` is required. 
+error: Aug-18-2021 10:46:35: 	Error while registering new user ValidationError: lastname: Path `lastname` is required. 
+info: Aug-18-2021 10:47:09: 	User successfully created id:611d479dcf9f7866f4e72040 email:tony@gmail.com 
