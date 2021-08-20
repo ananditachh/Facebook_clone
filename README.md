@@ -2,7 +2,7 @@
 npm start
 Mini Version of Social Media Clone with MERN stack
 Back End API's created with  Node,Express.js,Mongodb
-Youtube Link: https://youtu.be/mAuXQQXLTiw
+
 
 Registration and Login
 Reset Password (Email - Sendgrid Api)
