@@ -10,6 +10,7 @@ Create,Read,Update,Delete Profile
 Create,Read,Update,Delete Post
 Like,Unlike  Post
 Comment,Uncomment Post
+Follow and Unfollow People
 Get Friends Post on users News Feed
 Show Friends List on users Profile
 Search User based on handle
