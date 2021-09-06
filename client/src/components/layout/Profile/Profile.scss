@@ -1,0 +1,106 @@
+*{
+  outline: none;
+ }
+
+img
+{
+  display: flex;
+  width: 100%;
+  border: 0;
+  border-radius: 2rem;
+}
+
+#profile-upper
+{
+  position: relative;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  width: 650px;
+  height: 550px;     
+}
+
+#profile-d
+{
+  position: absolute;
+  left: 30rem;
+  bottom: 0px;
+  right: 0px;
+  height: 180px;
+  z-index: 2; 
+}
+
+#profile-pic
+{
+  width: 160px;
+  height: 150px;
+  margin-top: -17rem;
+  overflow: hidden;
+  border-radius: 25rem;
+  box-shadow: 0 0 0 4px #fff;
+  position: relative;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  
+
+  &:hover {
+    overflow: hidden;
+    -ms-transform: scale(1.1); 
+    -webkit-transform: scale(1.1); 
+    transform: scale(1.1);
+    transition: .5s;
+    box-shadow: 0 0 0 4px #3b5998;
+  
+}
+}
+
+#u-name
+{
+  position: absolute;
+  top: 30rem;
+  left: 43rem;
+  color:black;
+  font-size: 36px;
+  font-weight: bold;
+
+
+  &:hover {
+    overflow: hidden;
+    -ms-transform: scale(1.1); 
+    -webkit-transform: scale(1.1); 
+    transform: scale(1.1);
+    transition: .5s;
+    color:#3b5998;
+    
+  }
+}
+
+
+@media (min-width: 1063px) and (max-width: 1359px) {
+  
+  #u-name {
+    left: 26rem;
+  }
+ }
+
+@media (min-width: 882px) and (max-width: 1062px) {
+
+  #u-name {
+    left: 21rem;
+  }
+
+}
+
+@media (min-width: 660px) and (max-width: 881px) {
+  
+  #u-name {
+    left: 15rem;
+  }
+  img {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+

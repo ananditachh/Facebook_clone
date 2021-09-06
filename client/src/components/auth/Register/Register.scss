@@ -1,0 +1,66 @@
+
+.birthday h2{
+  color:#90949c;
+  font-size: 17px;
+  font-weight: bold;
+   margin-top: 20px;
+}
+
+.birthday select{
+  margin: 2px !important; 
+  
+}
+
+.gender h2{
+  color:#90949c;
+  font-size: 17px;
+  font-weight: bold;
+   margin: 10px;
+}
+
+.gender label{
+margin: 8px !important;
+}
+
+.topic{
+  color: #777;
+  font-size: 12px;
+  width: auto;
+}
+ 
+.modal-body h4 {
+  color:steelblue;
+  font-size: 20px;
+  font-weight: 500;
+ 
+}
+.modal-content{
+  border:lightgrey 6px solid;
+  border-radius: 1rem;
+}
+
+/* Start media screen part design for 980px */
+@media screen and (max-width: 980px){
+    
+    .topic{
+      color:#777;
+      font-size: 11px;
+      width: 55%;
+      padding-left: 186px;
+
+  }
+}
+/* End media screen part design for 980px */
+
+/* Start media screen part design for 768px */
+@media screen and (max-width: 768px){
+       
+    
+ .topic {
+      color: #777;
+      font-size: 11px;
+      width: 50%;
+      padding-left: 144px;
+  }
+}
+/* End media screen part design for 768px*/

@@ -1,0 +1,127 @@
+@import '../../../utils/mixins';
+@import '../../../utils/variables';
+
+.login {
+  height: 800px;
+  background-color: $app-background;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  @include for-small-screens {
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  
+  .logo {
+    display: flex;
+    margin-top: 20rem;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 85%;
+    
+     
+    @include for-small-screens {
+      flex: 0.1;
+    }
+
+    img {
+      width: 28rem;
+
+      @include for-mobile-only {
+        width: 19rem;
+      }
+    }
+
+    h3 {
+      margin-top: -2rem;
+      width: 25rem;
+      font-weight: 400;
+      font-size: 28px;
+
+      @include for-mobile-only {
+        width: 16rem;
+        text-align: center;
+        font-size: 1.1rem;
+        margin-top: -1rem;
+      }
+    }
+  }
+
+  .loginCard {
+    display: flex;
+    flex: 0.8;
+    align-items: flex-start;
+    flex-direction: column;
+    
+    
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem;
+      border-radius: 1.4rem;
+
+      @include for-mobile-only {
+        padding: 1.8rem;
+      }
+    }
+
+    .title {
+      font-size: 2.1rem;
+      font-weight: 600;
+      @include fluid-type(1.8rem, 2.1rem)
+    }
+
+    
+    }
+    .formbox {
+      display: inline-block;
+      width:399px;
+    }
+    .link {
+      color:#3b5998;
+      display: inline-block;
+      cursor: pointer;
+      font-weight: bold;
+           
+         }
+
+    .button1 {
+      background-color: $primary !important;
+      color: $white !important; 
+      align-self: bottom;
+      border-radius: 0.4rem;
+      margin-top: 3rem;
+      border: $primary ;
+      padding: 0.4rem 4rem;
+      height: 3rem;
+      width: 350px !important;
+      font-weight: bold;
+      transition: linear 200ms;
+      &:hover {
+        background-color: $primary-light !important;
+        transform: translateY(-2px);
+      }
+    }
+    
+      .button2 {
+        background-color:green;
+        margin-bottom: 15px;
+        color: $white !important; 
+        align-self: bottom;
+        border-radius: 0.4rem;
+         padding: 0.4rem 4rem;
+       // height: 3rem;
+        transition: linear 200ms;
+       
+        &:hover {
+          background-color: limegreen;
+          transform: translateY(-2px);
+          
+        }
+    }
+  }

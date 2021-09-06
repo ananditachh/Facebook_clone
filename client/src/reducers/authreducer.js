@@ -1,12 +1,22 @@
-/* eslint-disable import/no-anonymous-default-export */
-const initialState = {
-    isAuthenticated:false,
-    user:{}
-}
+import isEmpty from "../validations/is-empty"
+import { SET_USER } from "../actions/types";
 
-export default function (state=initialState,action){
-    switch(action.type){
-        default:
-            return state
-    }
+
+const initialState = {
+  isAuthenticated: false,
+  user: {}
+};
+
+export default function(state=initialState, action){
+
+  switch(action.type){
+    case SET_USER:
+      return {
+        ...state,
+       isAuthenticated: !isEmpty(action.payload),
+       user: action.payload
+      }
+    default:
+      return state;
+  }
 }
